@@ -12,487 +12,212 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- RESET E VARIABILI --- */
+        /* --- MATERIAL DESIGN 3 DESIGN TOKENS --- */
         :root {
-            --bg-dark: #090a0f;
-            --nav-bg: rgba(20, 22, 28, 0.75);
-            --nav-border: rgba(255, 255, 255, 0.08);
-            --pill-dark: #1b1e24;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --text-hover: #ffffff;
-            --accent-blue: #2563eb; 
-            --accent-hover: #1d4ed8;
+            --md-sys-color-background: #111318;
+            --md-sys-color-on-background: #E2E2E9;
+            --md-sys-color-surface: #111318;
+            --md-sys-color-surface-container-lowest: #0c0e12;
+            --md-sys-color-surface-container-low: #191c20;
+            --md-sys-color-surface-container: #1D2024;
+            --md-sys-color-surface-container-high: #282A2F;
+            --md-sys-color-surface-container-highest: #33353A;
+            --md-sys-color-on-surface: #E2E2E9;
+            --md-sys-color-on-surface-variant: #C4C6D0;
+            
+            --md-sys-color-primary: #A8C7FA;
+            --md-sys-color-on-primary: #062E6F;
+            --md-sys-color-primary-container: #004A77; 
+            --md-sys-color-on-primary-container: #C2E7FF;
+            
+            --md-sys-color-tertiary: #E8C16D;
+            --md-sys-color-on-tertiary: #3D2E00;
+            --md-sys-color-tertiary-container: #584400;
+
+            --md-sys-shape-corner-small: 8px;
+            --md-sys-shape-corner-medium: 12px;
+            --md-sys-shape-corner-large: 16px;
+            --md-sys-shape-corner-extra-large: 28px;
+            --md-sys-shape-corner-full: 9999px;
+
+            --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+            --md-sys-motion-duration-medium: 400ms;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            /* Applicazione del font Lexend a tutto il sito */
-            font-family: 'Lexend', sans-serif;
+        /* --- RESET E GLOBALI --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Lexend', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--md-sys-color-background); color: var(--md-sys-color-on-background); overflow-x: hidden; scroll-behavior: smooth; }
+        a { text-decoration: none; color: inherit; cursor: pointer; outline: none; }
+
+        /* --- EFFETTO RIPPLE --- */
+        .md-interactive { position: relative; overflow: hidden; cursor: pointer; }
+        span.ripple { position: absolute; border-radius: 50%; transform: scale(0); animation: ripple 600ms linear; background-color: rgba(255, 255, 255, 0.15); pointer-events: none; }
+        @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+        /* --- NAVBAR --- */
+        .navbar-wrapper { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 1400px; z-index: 1000; }
+        .navbar { background: rgba(29, 32, 36, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--md-sys-shape-corner-full); padding: 8px 12px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); }
+        
+        .nav-logo { background: var(--md-sys-color-surface-container-high); padding: 8px 24px 8px 16px; border-radius: var(--md-sys-shape-corner-full); display: flex; align-items: center; gap: 12px; font-weight: 700; color: var(--md-sys-color-on-surface); }
+        .nav-logo img { height: 32px; width: auto; object-fit: contain; }
+        
+        .nav-center { justify-self: center; display: flex; align-items: center; gap: 8px; }
+        .nav-center a { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 500; color: var(--md-sys-color-on-surface-variant); padding: 10px 20px; border-radius: var(--md-sys-shape-corner-full); transition: all 0.2s ease; }
+        .nav-center a:hover { background: rgba(255, 255, 255, 0.08); color: var(--md-sys-color-on-surface); }
+        .nav-center a.active { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+        .nav-center a i { font-size: 1.1rem; }
+        
+        .dropdown { position: relative; display: flex; align-items: center; }
+        .dropdown-menu { visibility: hidden; opacity: 0; transform: translateY(10px) scale(0.95); position: absolute; top: 120%; left: 50%; transform-origin: top center; background: var(--md-sys-color-surface-container-highest); border-radius: var(--md-sys-shape-corner-large); padding: 12px 8px; display: flex; flex-direction: column; gap: 4px; transition: all 0.2s var(--md-sys-motion-easing-emphasized); box-shadow: 0 8px 24px rgba(0,0,0,0.4); min-width: 260px; margin-left: -130px; z-index: 1000; border: 1px solid rgba(255,255,255,0.05); }
+        .dropdown:hover .dropdown-menu { visibility: visible; opacity: 1; transform: translateY(0) scale(1); }
+        .dropdown-menu a { padding: 12px 16px; border-radius: var(--md-sys-shape-corner-medium); justify-content: flex-start; }
+
+        .nav-right { justify-self: end; }
+        .md-btn-primary { background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); padding: 10px 24px 10px 20px; border-radius: var(--md-sys-shape-corner-full); display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 0.95rem; border: none; transition: background 0.2s ease; }
+        .md-btn-primary:hover { background-color: #d1e4ff; }
+        .md-btn-primary .icon-circle { background-color: var(--md-sys-color-on-primary); color: var(--md-sys-color-primary); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+
+        /* --- STILI GLOBALI E COMPONENTI COMUNI --- */
+        .page-content { position: relative; z-index: 3; max-width: 1300px; margin: 0 auto; padding: 40px 20px 100px; }
+        .page-content.overlap { margin-top: -60px; }
+        
+        .breadcrumb { display: inline-flex; align-items: center; gap: 12px; font-size: 0.95rem; color: var(--md-sys-color-on-surface-variant); margin-bottom: 50px; padding: 12px 24px; background: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-full); position: relative; left: 50%; transform: translateX(-50%); border: 1px solid rgba(255,255,255,0.05); }
+        .breadcrumb a:hover { color: var(--md-sys-color-primary); }
+        .breadcrumb span { color: var(--md-sys-color-primary); font-weight: 600; }
+
+        /* INPUT MATERIAL STANDARDIZZATI */
+        .md-input-group { display: flex; flex-direction: column; text-align: left; margin-bottom: 24px; position: relative; width: 100%; }
+        .md-input-label { font-size: 0.85rem; font-weight: 600; color: var(--md-sys-color-primary); margin-bottom: 8px; margin-left: 4px; }
+        .md-input { background: var(--md-sys-color-surface-container-highest); border: none; border-bottom: 2px solid var(--md-sys-color-on-surface-variant); border-radius: 8px 8px 0 0; padding: 16px; color: var(--md-sys-color-on-surface); font-size: 1rem; font-family: inherit; transition: all 0.3s; outline: none; width: 100%; }
+        .md-input:focus { border-bottom-color: var(--md-sys-color-primary); background: #3a3d42; }
+        .md-input::placeholder { color: #888; }
+        select.md-input { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23C4C6D0%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 16px top 50%; background-size: 12px auto; padding-right: 40px; }
+
+        /* --- TRANSIZIONI PAGINE --- */
+        .page-section { display: none; opacity: 0; }
+        .page-section.active { display: block; animation: md-page-enter 0.4s var(--md-sys-motion-easing-emphasized) forwards; }
+        @keyframes md-page-enter {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            overflow-x: hidden;
+        /* --- HERO HEADER --- */
+        .hero { position: relative; height: 100vh; width: 100%; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .hero-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; animation: slideShow 16s infinite; z-index: 1;}
+        .hero-slide::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(17, 19, 24, 0.3), var(--md-sys-color-background)); }
+        .slide-1 { background-image: url('https://i.imgur.com/HYyxG9W.jpg'); animation-delay: 0s; }
+        .slide-2 { background-image: url('https://i.imgur.com/TOEz1GU.jpg'); animation-delay: 8s; }
+        @keyframes slideShow { 0%, 100% { opacity: 0; transform: scale(1.05); } 5%, 45% { opacity: 1; transform: scale(1); } 50% { opacity: 0; } }
+        
+        .hero-content-main { position: relative; z-index: 2; text-align: center; padding: 0 20px; }
+        .hero h1 { font-size: 5.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 25px; color: var(--md-sys-color-on-surface); text-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+        .hero-logo { max-width: 150px; margin: 0 auto 15px; }
+        .contact-info { font-size: 1rem; color: var(--md-sys-color-on-surface-variant); margin: 30px auto; font-weight: 400; }
+        
+        .md-btn-tonal { background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); padding: 16px 36px; border-radius: var(--md-sys-shape-corner-full); font-weight: 600; font-size: 1.05rem; border: none; transition: background 0.2s; display: inline-flex; align-items: center; gap: 12px; }
+        .md-btn-tonal:hover { background: rgba(255,255,255,0.15); }
+
+        /* HERO INTERNE */
+        .hero-small { position: relative; height: 45vh; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; padding-top: 60px; background-color: var(--md-sys-color-background); }
+        .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; z-index: 1; animation: scale-in 10s ease-out forwards; }
+        .hero-bg::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(17,19,24, 0.4), var(--md-sys-color-background)); }
+        @keyframes scale-in { 0% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .hero-content { position: relative; z-index: 2; text-align: center; }
+        .hero-content h1 { font-size: 4rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; text-transform: uppercase; }
+        .hero-content p { font-size: 1.2rem; color: var(--md-sys-color-primary); font-weight: 500; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* --- HOME: SERVIZI --- */
+        .services-section { padding: 100px 5%; max-width: 1600px; margin: 0 auto; position: relative; z-index: 3; }
+        .section-title { text-align: center; font-size: 2.5rem; font-weight: 800; margin-bottom: 60px; letter-spacing: 1px; text-transform: uppercase; }
+        .section-title span { color: var(--md-sys-color-primary); }
+        .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .md-card { background: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-extra-large); overflow: hidden; display: flex; flex-direction: column; transition: transform var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-emphasized), background 0.2s; border: 1px solid rgba(255,255,255,0.02); }
+        .md-card:hover { transform: translateY(-8px); background: var(--md-sys-color-surface-container-high); }
+        .md-card img { width: 100%; height: 200px; object-fit: cover; }
+        .md-card-content { padding: 24px; display: flex; flex-direction: column; flex-grow: 1; }
+        .md-card-content h3 { color: var(--md-sys-color-primary); font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; text-align: center; }
+        .md-card-content p, .md-card-content ul { font-size: 0.95rem; color: var(--md-sys-color-on-surface-variant); line-height: 1.6; margin-bottom: 20px; flex-grow: 1; font-weight: 400; }
+        .md-card-content ul { padding-left: 20px; }
+        .service-link { text-align: center; font-size: 0.9rem; color: var(--md-sys-color-on-surface-variant); margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05); }
+
+        /* --- NOTIZIE --- */
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 32px; }
+        .news-card { background: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-extra-large); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease; border: 1px solid rgba(255,255,255,0.02); }
+        .news-card:hover { transform: translateY(-5px); background: var(--md-sys-color-surface-container-high); }
+        .news-card img { width: 100%; height: 220px; object-fit: cover; }
+        .news-body { padding: 24px; display: flex; flex-direction: column; flex-grow: 1; }
+        .news-chip { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); padding: 4px 12px; border-radius: var(--md-sys-shape-corner-small); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; width: fit-content; margin-bottom: 16px; }
+        .news-card h3 { font-size: 1.4rem; color: var(--md-sys-color-on-surface); margin-bottom: 12px; line-height: 1.3; }
+        .news-card p { font-size: 0.95rem; color: var(--md-sys-color-on-surface-variant); line-height: 1.6; margin-bottom: 24px; flex-grow: 1; }
+        .news-actions { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--md-sys-color-surface-container-highest); }
+        .news-btn { background: transparent; color: var(--md-sys-color-primary); border: none; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: var(--md-sys-shape-corner-medium); transition: background 0.2s; }
+        .news-btn:hover { background: rgba(168, 199, 250, 0.1); }
+
+        /* --- DIRIGENZA (Layout Formale Organigramma) --- */
+        .org-chart-container { display: flex; flex-direction: column; align-items: center; gap: 80px; margin-top: 60px; }
+        .exec-card { background: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-extra-large); padding: 60px 40px 40px; text-align: center; position: relative; width: 100%; max-width: 450px; transition: transform 0.3s ease, background 0.3s; border: 1px solid rgba(255,255,255,0.03); }
+        .exec-card:hover { transform: translateY(-5px); background: var(--md-sys-color-surface-container-high); }
+        .exec-card.chief { max-width: 600px; background: var(--md-sys-color-surface-container-high); border: 1px solid rgba(232, 193, 109, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+        
+        .exec-avatar { width: 140px; height: 140px; border-radius: 50%; position: absolute; top: -70px; left: 50%; transform: translateX(-50%); border: 6px solid var(--md-sys-color-background); box-shadow: 0 8px 24px rgba(0,0,0,0.3); object-fit: cover; background: var(--md-sys-color-surface-container); }
+        .chief .exec-avatar { width: 160px; height: 160px; top: -80px; border-color: var(--md-sys-color-tertiary); }
+        
+        .exec-name { font-size: 2rem; font-weight: 800; color: var(--md-sys-color-on-surface); margin-bottom: 4px; }
+        .chief .exec-name { font-size: 2.4rem; }
+        .exec-role { font-size: 1.05rem; color: var(--md-sys-color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+        .chief .exec-role { color: var(--md-sys-color-tertiary); }
+        .exec-desc { color: var(--md-sys-color-on-surface-variant); line-height: 1.7; font-size: 1rem; }
+        
+        .exec-sub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; width: 100%; max-width: 1000px; position: relative; }
+        @media (min-width: 950px) {
+            .exec-sub-grid::before { content: ''; position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 2px; height: 40px; background: var(--md-sys-color-surface-container-highest); }
+            .exec-sub-grid::after { content: ''; position: absolute; top: -40px; left: 25%; width: 50%; height: 2px; background: var(--md-sys-color-surface-container-highest); }
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+        /* --- PRENOTA APPUNTAMENTO --- */
+        .booking-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; align-items: start; max-width: 1100px; margin: 0 auto; }
+        .booking-info { background: var(--md-sys-color-surface-container-low); padding: 40px; border-radius: var(--md-sys-shape-corner-extra-large); }
+        .booking-info h2 { font-size: 1.8rem; margin-bottom: 20px; color: var(--md-sys-color-on-surface); }
+        .booking-info p { color: var(--md-sys-color-on-surface-variant); line-height: 1.6; margin-bottom: 20px; }
+        .booking-info ul { color: var(--md-sys-color-on-surface-variant); padding-left: 20px; line-height: 1.8; margin-bottom: 30px; }
+        .booking-info .contact-box { background: rgba(168, 199, 250, 0.1); padding: 20px; border-radius: var(--md-sys-shape-corner-medium); border-left: 4px solid var(--md-sys-color-primary); }
+        
+        .booking-form-card { background: var(--md-sys-color-surface-container); padding: 48px; border-radius: var(--md-sys-shape-corner-extra-large); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-        /* --- NAVBAR FLOTTANTE CENTRATA --- */
-        .navbar-wrapper {
-            position: fixed;
-            top: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 95%;
-            max-width: 1400px;
-            z-index: 1000;
-        }
+        .md-btn-submit { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border: none; padding: 16px 32px; border-radius: var(--md-sys-shape-corner-full); font-weight: 700; font-size: 1.05rem; transition: background 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
+        .md-btn-submit:hover { background: #d1e4ff; }
 
-        .navbar {
-            background: var(--nav-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--nav-border);
-            border-radius: 999px;
-            padding: 6px 8px;
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
+        /* --- LOGIN (SEZIONE CORRETTA E RIVISITATA) --- */
+        .login-formal-container { display: flex; justify-content: center; align-items: start; margin-top: 40px; }
+        .login-card-formal { background: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-extra-large); padding: 48px; width: 100%; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: center; border-left: 6px solid var(--md-sys-color-primary); position: relative;}
+        .login-logo-formal { width: 90px; margin-bottom: 24px; }
+        .login-card-formal h2 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; color: var(--md-sys-color-on-surface); }
+        .login-card-formal p { color: var(--md-sys-color-on-surface-variant); margin-bottom: 32px; font-size: 0.95rem; line-height: 1.6; }
+        .login-options-formal { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; font-size: 0.9rem; }
+        .login-options-formal label { display: flex; align-items: center; gap: 8px; color: var(--md-sys-color-on-surface-variant); cursor: pointer; }
+        .login-options-formal a { color: var(--md-sys-color-primary); font-weight: 600; }
+        .login-options-formal a:hover { text-decoration: underline; }
 
-        .nav-left {
-            justify-self: start;
-        }
+        .md-btn-submit-formal { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border: none; padding: 16px; border-radius: var(--md-sys-shape-corner-full); font-weight: 700; font-size: 1.1rem; width: 100%; transition: background 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px;}
+        .md-btn-submit-formal:hover { background: #d1e4ff; }
 
-        .nav-logo {
-            background: var(--pill-dark);
-            padding: 6px 20px 6px 12px;
-            border-radius: 999px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            color: var(--text-main);
-            white-space: nowrap;
-        }
+        /* --- CONCORSI --- */
+        .md-surface-panel { background: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-extra-large); padding: 48px; text-align: center; margin-bottom: 40px; }
+        .md-surface-panel h2 { font-size: 2rem; font-weight: 700; margin-bottom: 15px; color: var(--md-sys-color-on-surface); text-transform: uppercase; }
 
-        .nav-logo img {
-            height: 36px;
-            width: auto;
-            object-fit: contain;
-        }
-
-        .nav-center {
-            justify-self: center;
-            display: flex;
-            align-items: center;
-            gap: 28px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--text-muted);
-        }
-
-        .nav-center a {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: color 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .nav-center a:hover {
-            color: var(--text-hover);
-        }
-
-        .nav-center a i {
-            font-size: 1rem;
-            opacity: 0.8;
-            color: var(--text-hover);
-        }
-
-        /* --- DROPDOWN (MENÙ A TENDINA) MODIFICATO --- */
-        .dropdown {
-            position: relative;
-            display: flex;
-            align-items: center;
-            height: 100%;
-            padding: 10px 0;
-        }
-
-        .dropdown-menu {
-            visibility: hidden;
-            opacity: 0;
-            /* Parte più in basso */
-            transform: translate(-50%, 30px); 
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            width: 220px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--nav-border);
-            border-radius: 12px;
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-
-        /* Il "ponte" invisibile per mantenere l'hover attivo */
-        .dropdown-menu::before {
-            content: '';
-            position: absolute;
-            top: -25px; /* Copre lo spazio vuoto tra la navbar e il sottomenù */
-            left: 0;
-            width: 100%;
-            height: 25px;
-        }
-
-        .dropdown:hover .dropdown-menu {
-            visibility: visible;
-            opacity: 1;
-            /* Si ferma più giù senza accavallarsi alla navbar (15px di distacco) */
-            transform: translate(-50%, 15px); 
-        }
-
-        .dropdown-menu a {
-            padding: 10px 12px;
-            border-radius: 8px;
-            color: var(--text-muted);
-            transition: background 0.2s, color 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: flex-start;
-            font-weight: 400;
-        }
-
-        .dropdown-menu a:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-hover);
-        }
-
-        .nav-right {
-            justify-self: end;
-        }
-
-        .nav-login-btn {
-            background-color: var(--accent-blue);
-            color: white;
-            padding: 6px 10px 6px 20px;
-            border-radius: 999px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: background 0.2s ease, transform 0.2s;
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .nav-login-btn:hover {
-            background-color: var(--accent-hover);
-            transform: scale(1.05);
-        }
-
-        .nav-login-btn .icon-circle {
-            background-color: rgba(255, 255, 255, 0.2);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- HERO SECTION CON SFONDO ANIMATO --- */
-        .hero {
-            position: relative;
-            height: 100vh;
-            width: 100%;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .hero-background-slideshow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .hero-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out;
-            animation: slideShow 16s infinite;
-        }
-
-        .hero-slide::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(9, 10, 15, 0.4), var(--bg-dark));
-        }
-
-        .slide-1 {
-            background-image: url('https://i.imgur.com/HYyxG9W.jpg');
-            animation-delay: 0s;
-        }
-
-        .slide-2 {
-            background-image: url('https://i.imgur.com/TOEz1GU.jpg');
-            animation-delay: 8s;
-        }
-
-        @keyframes slideShow {
-            0% { opacity: 0; }
-            5% { opacity: 1; }
-            45% { opacity: 1; }
-            55% { opacity: 0; }
-            100% { opacity: 0; }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        .hero h1 {
-            font-size: 5rem;
-            font-weight: 800;
-            letter-spacing: -2px;
-            /* Margin bottom reduced to separate it better from the logo and line */
-            margin-bottom: 25px; 
-            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
-
-        /* New styles for the logo ABOVE title */
-        .hero-logo {
-            max-width: 150px;
-            height: auto;
-            display: block;
-            margin: 0 auto 15px; /* Centered, 15px bottom margin for title gap */
-        }
-
-        /* Old paragraph REMOVED entirely, styling below also removed */
-        /* .hero p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin-bottom: 40px;
-            font-weight: 300;
-            line-height: 1.6;
-        }
-        */
-
-        /* Style for the new separator line */
-        .separator-line {
-            border: 0;
-            border-top: 1px solid var(--nav-border); /* Muted blue border color */
-            width: 100%;
-            max-width: 400px; /* Optional: limit width and center */
-            margin: 0 auto 20px; /* Center with margins ABOVE contact info */
-            display: block;
-        }
-
-        /* New style for the contact info paragraph BELOW line */
-        .contact-info {
-            font-size: 1rem;
-            color: var(--text-muted); /* muted white text */
-            margin: 0 auto 30px; /* Center, 30px margin ABOVE button */
-            font-weight: 300; /* Lexend light, matches old styling */
-            line-height: 1.6;
-            text-align: center;
-        }
-
-        .contact-info a {
-            color: inherit; /* Links inherit muted text color, making them text color */
-            text-decoration: none; /* No underline by default */
-        }
-
-        .contact-info a:hover {
-            color: var(--text-hover); /* Brighter white on hover */
-            text-decoration: underline; /* Add underline on hover */
-        }
-
-        .btn-scroll {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-main);
-            border: 1px solid var(--nav-border);
-            padding: 15px 35px;
-            border-radius: 999px;
-            font-weight: 500;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            cursor: pointer;
-        }
-
-        .btn-scroll:hover {
-            background: var(--text-main);
-            color: var(--bg-dark);
-            transform: translateY(-3px);
-        }
-
-        /* --- SEZIONE SERVIZI --- */
-        .services-section {
-            padding: 100px 5%;
-            background-color: var(--bg-dark);
-            max-width: 1600px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 3;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 60px;
-            color: var(--text-main);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .section-title span {
-            color: var(--accent-blue);
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-        }
-
-        .service-card {
-            background: var(--nav-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--nav-border);
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: all 0.3s ease;
-        }
-
-        .service-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-blue);
-            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.15);
-        }
-
-        .service-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-bottom: 1px solid var(--nav-border);
-            transition: transform 0.5s ease;
-        }
-
-        .service-card:hover img {
-            transform: scale(1.05);
-        }
-
-        .service-content {
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .service-content h3 {
-            color: var(--accent-blue);
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
-        .service-content p, .service-content ul {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 20px;
-            flex-grow: 1;
-            font-weight: 300;
-        }
-
-        .service-content ul {
-            padding-left: 20px;
-        }
-
-        .service-content ul li {
-            margin-bottom: 10px;
-        }
-
-        .service-link {
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            border-top: 1px solid var(--nav-border);
-            padding-top: 15px;
-            margin-top: auto;
-        }
-
-        .service-link strong {
-            color: var(--accent-blue);
-            font-weight: 600;
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            text-align: center;
-            padding: 50px 20px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--nav-border);
-            background-color: var(--bg-dark);
-            position: relative;
-            z-index: 3;
-            font-weight: 300;
-        }
+        /* FOOTER */
+        footer { text-align: center; padding: 40px 20px; color: var(--md-sys-color-on-surface-variant); font-size: 0.9rem; background-color: var(--md-sys-color-background); position: relative; z-index: 3; border-top: 1px solid var(--md-sys-color-surface-container); }
 
         /* --- RESPONSIVE --- */
-        @media (max-width: 1200px) {
-            .services-grid { grid-template-columns: repeat(2, 1fr); }
-            .nav-center { display: none; }
-        }
-        @media (max-width: 768px) {
-            .services-grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 3.5rem; }
+        @media (max-width: 1200px) { .nav-center { display: none; } .services-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 950px) { .booking-layout { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { 
+            .services-grid { grid-template-columns: 1fr; } 
+            .news-grid { grid-template-columns: 1fr; } 
+            .hero h1 { font-size: 3.5rem; } 
+            .org-chart-container { gap: 60px; }
+            .exec-card { padding: 50px 20px 30px; margin-top: 40px; }
         }
     </style>
 </head>
@@ -500,136 +225,439 @@
 
     <div class="navbar-wrapper">
         <nav class="navbar">
-            
             <div class="nav-left">
-                <div class="nav-logo">
+                <div class="nav-logo md-interactive" onclick="showPage('page-home')">
                     <img src="https://i.imgur.com/SUM8B5x.png" alt="Logo">
                     POLIZIA IPRP
                 </div>
             </div>
             
             <div class="nav-center">
-                <a href="#"><i class="fas fa-home"></i> Home</a>
-                <a href="#"><i class="fas fa-bullhorn"></i> Notizie</a>
+                <a onclick="showPage('page-home')" data-target="page-home" class="nav-link active md-interactive"><i class="fas fa-home"></i> Home</a>
+                <a onclick="showPage('page-notizie')" data-target="page-notizie" class="nav-link md-interactive"><i class="fas fa-bullhorn"></i> Notizie</a>
                 
                 <div class="dropdown">
-                    <a href="#"><i class="fas fa-search"></i> Chi Siamo <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: -2px;"></i></a>
+                    <a href="#" class="nav-link md-interactive" data-target="page-dirigenza"><i class="fas fa-search"></i> Chi Siamo <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 4px;"></i></a>
                     <div class="dropdown-menu">
-                        <a href="capo-polizia.html"><i class="fas fa-user-tie"></i> Il Capo della Polizia</a>
-                        <a href="#"><i class="fas fa-book"></i> Storia della Polizia</a>
+                        <a onclick="showPage('page-dirigenza')" class="md-interactive"><i class="fas fa-user-tie"></i> La Dirigenza</a>
+                        <a href="#" class="md-interactive"><i class="fas fa-book"></i> Storia della Polizia</a>
                     </div>
                 </div>
 
-                <a href="qualifiche.html"><i class="fas fa-medal"></i> Qualifiche</a>
-                <a href="#"><i class="fas fa-calendar-check"></i> Prenota</a>
-                <a href="concorso.html"><i class="fas fa-trophy"></i> Concorso Pubblico</a>
+                <a onclick="showPage('page-prenota')" data-target="page-prenota" class="nav-link md-interactive"><i class="fas fa-calendar-check"></i> Prenota</a>
+                <a onclick="showPage('page-concorso')" data-target="page-concorso" class="nav-link md-interactive"><i class="fas fa-trophy"></i> Concorsi</a>
             </div>
 
             <div class="nav-right">
-                <button class="nav-login-btn">
+                <button class="md-btn-primary md-interactive" onclick="showPage('page-login')">
                     Login
-                    <div class="icon-circle">
-                        <i class="fas fa-lock"></i>
-                    </div>
+                    <div class="icon-circle"><i class="fas fa-lock"></i></div>
                 </button>
             </div>
-
         </nav>
     </div>
 
-    <section class="hero">
-        <div class="hero-background-slideshow">
+    <div id="page-home" class="page-section active">
+        <section class="hero">
             <div class="hero-slide slide-1"></div>
             <div class="hero-slide slide-2"></div>
-        </div>
 
-        <div class="hero-content">
-            <img src="https://i.imgur.com/gRzOXM3.png" alt="PDS Logo" class="hero-logo">
-            
-            <h1>POLIZIA DI STATO</h1>
-            
-            <hr class="separator-line">
-            
-            <p class="contact-info">
-                Via dei Peccatori N°761  -  <a href="mailto:dirigenzapds.iprp@gmail.com">dirigenzapds.iprp@gmail.com</a>  -  Tel: <a href="tel:113">113</a>
-            </p>
+            <div class="hero-content-main">
+                <img src="https://i.imgur.com/gRzOXM3.png" alt="PDS Logo" class="hero-logo">
+                <h1>POLIZIA DI STATO</h1>
+                
+                <p class="contact-info">
+                    Via dei Peccatori N°761 &nbsp;•&nbsp; <a href="mailto:dirigenzapds.iprp@gmail.com">dirigenzapds.iprp@gmail.com</a> &nbsp;•&nbsp; Tel: <a href="tel:113">113</a>
+                </p>
 
-            <button class="btn-scroll" onclick="document.getElementById('servizi').scrollIntoView({behavior: 'smooth'})">
-                Scopri i Servizi <i class="fas fa-arrow-down" style="margin-left: 8px;"></i>
-            </button>
-        </div>
-    </section>
+                <button class="md-btn-tonal md-interactive" onclick="document.getElementById('servizi').scrollIntoView({behavior: 'smooth'})">
+                    Scopri i Servizi <i class="fas fa-arrow-down"></i>
+                </button>
+            </div>
+        </section>
 
-    <section id="servizi" class="services-section">
-        <h2 class="section-title">I Nostri <span>Servizi</span></h2>
-        
-        <div class="services-grid">
+        <section id="servizi" class="services-section">
+            <h2 class="section-title">I Nostri <span>Servizi</span></h2>
             
-            <div class="service-card">
-                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80" alt="Ufficio URP">
-                <div class="service-content">
-                    <h3>UFFICIO RELAZIONI COL PUBBLICO</h3>
-                    <p>L'Ufficio <strong>URP</strong> della Polizia Di Stato di Roma, svolge diverse funzioni fondamentali per il servizio al cittadino.</p>
-                    <div class="service-link">
-                        Consulta anche la pagina: <a href="#"><strong>URP</strong></a>
+            <div class="services-grid">
+                <div class="md-card md-interactive">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80" alt="Ufficio URP">
+                    <div class="md-card-content">
+                        <h3>UFFICIO RELAZIONI COL PUBBLICO</h3>
+                        <p>L'Ufficio <strong>URP</strong> della Polizia Di Stato di Roma, svolge diverse funzioni fondamentali per il servizio al cittadino.</p>
+                        <div class="service-link">Vai a <a href="#"><strong>URP</strong></a></div>
+                    </div>
+                </div>
+
+                <div class="md-card md-interactive" onclick="showPage('page-prenota')">
+                    <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80" alt="Porto Armi">
+                    <div class="md-card-content">
+                        <h3>PORTO D'ARMI</h3>
+                        <p style="margin-bottom: 8px; font-weight: 600;">REQUISITI:</p>
+                        <ul>
+                            <li>Fedina penale pulita</li>
+                            <li>Maggiore età</li>
+                            <li>Idoneità Anamnestica/Balistica</li>
+                            <li>Motivazione valida</li>
+                        </ul>
+                        <div class="service-link">Vai a <strong>Prenota Appuntamento</strong></div>
+                    </div>
+                </div>
+
+                <div class="md-card md-interactive" onclick="showPage('page-prenota')">
+                    <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80" alt="Denuncia">
+                    <div class="md-card-content">
+                        <h3>DENUNCIA, QUERELA, ESPOSTO</h3>
+                        <p>Recati al desk della Questura o prendi una prenotazione per formalizzare la tua deposizione con un operatore di Polizia.</p>
+                        <div class="service-link">Vai a <strong>Prenota Appuntamento</strong></div>
+                    </div>
+                </div>
+
+                <div class="md-card md-interactive" onclick="showPage('page-concorso')">
+                    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80" alt="Concorsi">
+                    <div class="md-card-content">
+                        <h3>BANDO DI CONCORSO</h3>
+                        <p>Verifica i requisiti per accedere alla carriera nella Polizia di Stato ed entra a far parte del corpo.</p>
+                        <div class="service-link">Vai a <strong>Concorso Pubblico</strong></div>
                     </div>
                 </div>
             </div>
+        </section>
+    </div>
 
-            <div class="service-card">
-                <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80" alt="Porto Armi">
-                <div class="service-content">
-                    <h3>PORTO D'ARMI</h3>
-                    <p style="margin-bottom: 5px;">REQUISITI:</p>
+    <div id="page-notizie" class="page-section">
+        <header class="hero-small" style="height: 35vh;">
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&q=80'); filter: blur(3px) brightness(0.3);"></div>
+            <div class="hero-content">
+                <h1>SALA STAMPA</h1>
+                <p>Comunicati e Ultime Notizie</p>
+            </div>
+        </header>
+
+        <main class="page-content overlap">
+            <div class="breadcrumb md-interactive">
+                <a onclick="showPage('page-home')">Home</a> 
+                <i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> 
+                <span>Notizie</span>
+            </div>
+
+            <div class="news-grid">
+                <div class="news-card md-interactive">
+                    <img src="https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?auto=format&fit=crop&q=80" alt="Operazione">
+                    <div class="news-body">
+                        <div class="news-chip">Operazione</div>
+                        <h3>Maxi sequestro nel centro cittadino</h3>
+                        <p>Nelle prime ore dell'alba, la Squadra Mobile ha concluso un'importante operazione antidroga sequestrando oltre 50kg di stupefacenti...</p>
+                        <div class="news-actions">
+                            <span style="font-size: 0.85rem; color: var(--md-sys-color-on-surface-variant);"><i class="far fa-clock"></i> Oggi, 08:30</span>
+                            <button class="news-btn md-interactive">Leggi <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="news-card md-interactive">
+                    <img src="https://images.unsplash.com/photo-1541888081684-2e633d671842?auto=format&fit=crop&q=80" alt="Concorso">
+                    <div class="news-body">
+                        <div class="news-chip" style="background: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-tertiary);">Bandi</div>
+                        <h3>Apertura bando Allievi Agenti</h3>
+                        <p>La Direzione Centrale annuncia l'apertura delle iscrizioni per il 227° Corso. I requisiti sono disponibili sul portale dedicato...</p>
+                        <div class="news-actions">
+                            <span style="font-size: 0.85rem; color: var(--md-sys-color-on-surface-variant);"><i class="far fa-clock"></i> Ieri, 14:15</span>
+                            <button class="news-btn md-interactive">Leggi <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="news-card md-interactive">
+                    <img src="https://images.unsplash.com/photo-1623863459141-860fbe222cb4?auto=format&fit=crop&q=80" alt="Viabilità">
+                    <div class="news-body">
+                        <div class="news-chip" style="background: #2a1114; color: #ffb4ab;">Avviso</div>
+                        <h3>Modifiche alla viabilità stradale</h3>
+                        <p>La Polizia Stradale informa i cittadini che a causa di lavori urgenti, l'uscita 14 del Raccordo subirà chiusure notturne...</p>
+                        <div class="news-actions">
+                            <span style="font-size: 0.85rem; color: var(--md-sys-color-on-surface-variant);"><i class="far fa-clock"></i> 3 giorni fa</span>
+                            <button class="news-btn md-interactive">Leggi <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="page-dirigenza" class="page-section">
+        <header class="hero-small">
+            <div class="hero-bg" style="background-image: url('https://i.imgur.com/8fsNUu2.jpg'); filter: blur(4px) brightness(0.4);"></div>
+            <div class="hero-content">
+                <h1>LA DIRIGENZA</h1>
+                <p>I Vertici della Polizia di Stato</p>
+            </div>
+        </header>
+
+        <main class="page-content overlap">
+            <div class="breadcrumb md-interactive">
+                <a onclick="showPage('page-home')">Home</a> 
+                <i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> 
+                <span>Chi Siamo</span>
+                <i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> 
+                <span>La Dirigenza</span>
+            </div>
+
+            <div class="org-chart-container">
+                
+                <div class="exec-card chief">
+                    <img src="https://i.imgur.com/8fsNUu2.jpg" alt="Marco Ferri" class="exec-avatar">
+                    <div class="exec-name">Marco Ferri</div>
+                    <div class="exec-role">Dirigente Generale / Prefetto</div>
+                    <p class="exec-desc">
+                        Massima autorità provinciale di Pubblica Sicurezza. Gestisce l'intera Questura centrale, determina le direttive operative strategiche e coordina in prima persona l'impiego delle Forze dell'Ordine sul territorio per garantire il mantenimento dell'ordine e della sicurezza pubblica.
+                    </p>
+                </div>
+
+                <div class="exec-sub-grid">
+                    <div class="exec-card">
+                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=crop&w=500&q=80" alt="Jolen Iuliano" class="exec-avatar">
+                        <div class="exec-name">Jolen Iuliano</div>
+                        <div class="exec-role">Dirigente Superiore</div>
+                        <p class="exec-desc">
+                            Affianca la direzione generale nel coordinamento tattico e amministrativo. Ha la supervisione diretta dei Reparti Speciali garantendo l'efficienza degli interventi in situazioni ad alto rischio.
+                        </p>
+                    </div>
+
+                    <div class="exec-card">
+                        <img src="https://i.imgur.com/Yy11WFJ.jpg" alt="Matteo Rossi" class="exec-avatar">
+                        <div class="exec-name">Matteo Rossi</div>
+                        <div class="exec-role">Primo Dirigente</div>
+                        <p class="exec-desc">
+                            Responsabile dell'operatività ordinaria sul campo. Sovraintende all'U.P.G.S.P., coordina la gestione del personale di pattuglia e funge da riferimento primario nel pronto intervento.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <div id="page-prenota" class="page-section">
+        <header class="hero-small" style="height: 35vh;">
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80'); filter: blur(4px) brightness(0.3);"></div>
+            <div class="hero-content">
+                <h1>PRENOTA APPUNTAMENTO</h1>
+                <p>Accesso Uffici e Servizi al Cittadino</p>
+            </div>
+        </header>
+
+        <main class="page-content overlap">
+            <div class="breadcrumb md-interactive">
+                <a onclick="showPage('page-home')">Home</a> 
+                <i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> 
+                <span>Prenota</span>
+            </div>
+
+            <div class="booking-layout">
+                <div class="booking-info">
+                    <h2>Modalità di Accesso</h2>
+                    <p>Per garantire un servizio efficiente e ridurre i tempi di attesa, l'accesso agli uffici della Questura avviene <strong>preferibilmente su prenotazione</strong> per i servizi ordinari.</p>
+                    
                     <ul>
-                        <li>Avere la fedina penale pulita, sia al ritiro che al rilascio;</li>
-                        <li>Essere maggiorenni;</li>
-                        <li>Risultare idonei al CERTIFICATO ANAMNESTICO e TEST BALISTICO;</li>
-                        <li>Avere una ragione valida e motivata che giustifichi il bisogno di andare armati.</li>
+                        <li><strong>Denunce e Querele:</strong> Il servizio è sempre garantito, ma la prenotazione riduce l'attesa.</li>
+                        <li><strong>Porto d'Armi:</strong> Si prega di presentarsi muniti di tutta la documentazione medica richiesta.</li>
+                        <li><strong>Colloqui:</strong> Specificare chiaramente il motivo nelle note della prenotazione.</li>
                     </ul>
-                    <div class="service-link">
-                        Consulta anche la pagina: <a href="#"><strong>Porto D'armi</strong></a>
+
+                    <div class="contact-box">
+                        <h4 style="color: var(--md-sys-color-primary); margin-bottom: 8px;">Emergenze</h4>
+                        <p style="margin-bottom: 0; font-size: 0.95rem;">Per situazioni di emergenza in corso, <strong>NON</strong> utilizzare questo modulo ma contatta immediatamente il <strong>113</strong> o il <strong>112 NUE</strong>.</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="service-card">
-                <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80" alt="Denuncia">
-                <div class="service-content">
-                    <h3>DENUNCIA, QUERELA, ESPOSTO</h3>
-                    <p>Per effettuare una Denuncia, Querela, Esposto recati al desk della Questura di Roma e degli operatori accoglieranno la tua deposizione.</p>
-                    <p>In assenza di operatori per effettuare una denuncia prendi una <a href="#" style="color: var(--accent-blue);">Prenotazione</a>. Se la prenotazione viene CONFERMATA "qui" recati in Questura nella data prestabilita.</p>
-                    <div class="service-link">
-                        Consulta anche la pagina: <a href="#"><strong>Denuncia</strong></a>
-                    </div>
+                <div class="booking-form-card">
+                    <form onsubmit="event.preventDefault(); alert('Richiesta inviata con successo. Riceverai una conferma a breve.');">
+                        
+                        <div class="form-row">
+                            <div class="md-input-group">
+                                <label class="md-input-label">Nome</label>
+                                <input type="text" class="md-input" placeholder="Il tuo nome" required>
+                            </div>
+                            <div class="md-input-group">
+                                <label class="md-input-label">Cognome</label>
+                                <input type="text" class="md-input" placeholder="Il tuo cognome" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="md-input-group">
+                                <label class="md-input-label">Recapito Telefonico</label>
+                                <input type="tel" class="md-input" placeholder="Es. 333 1234567" required>
+                            </div>
+                            <div class="md-input-group">
+                                <label class="md-input-label">Servizio Richiesto</label>
+                                <select class="md-input" required>
+                                    <option value="" disabled selected>Seleziona un servizio...</option>
+                                    <option value="denuncia">Sporgere Denuncia / Querela</option>
+                                    <option value="armi">Pratiche Porto d'Armi</option>
+                                    <option value="passaporti">Ufficio Passaporti</option>
+                                    <option value="colloquio">Colloqui Funzionario</option>
+                                    <option value="altro">Altro...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="md-input-group">
+                                <label class="md-input-label">Data Desiderata</label>
+                                <input type="date" class="md-input" required>
+                            </div>
+                            <div class="md-input-group">
+                                <label class="md-input-label">Fascia Oraria Preferita</label>
+                                <select class="md-input" required>
+                                    <option value="" disabled selected>Scegli un orario...</option>
+                                    <option value="mattina">Mattina (08:30 - 12:30)</option>
+                                    <option value="pomeriggio">Pomeriggio (14:00 - 18:00)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="md-input-group">
+                            <label class="md-input-label">Note Aggiuntive</label>
+                            <textarea class="md-input" rows="3" placeholder="Aggiungi ulteriori dettagli..." style="resize: vertical;"></textarea>
+                        </div>
+
+                        <button type="submit" class="md-btn-submit md-interactive" style="margin-top: 10px;">
+                            Conferma Prenotazione <i class="fas fa-check"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
+        </main>
+    </div>
 
-            <div class="service-card">
-                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80" alt="Concorsi">
-                <div class="service-content">
-                    <h3>BANDO DI CONCORSO</h3>
-                    <p>Prenota per effettuare un colloquio, o recati in Questura o prendi una Prenotazione e specifica la tua intenzione, con le relative motivazioni e la persona con la quale vuoi parlare.</p>
-                    <div class="service-link">
-                        Consulta anche la pagina: <a href="#"><strong>Concorso Pubblico</strong></a>
-                    </div>
+    <div id="page-concorso" class="page-section">
+        <header class="hero-small">
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80'); filter: blur(3px) brightness(0.4);"></div>
+            <div class="hero-content">
+                <h1>CONCORSI PUBBLICI</h1>
+                <p>Entra nella Polizia di Stato</p>
+            </div>
+        </header>
+        <main class="page-content overlap">
+             <div class="breadcrumb md-interactive">
+                <a onclick="showPage('page-home')">Home</a> 
+                <i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> 
+                <span>Concorsi</span>
+            </div>
+            
+            <div class="md-surface-panel">
+                <h2>Bandi Aperti</h2>
+                <p style="color: var(--md-sys-color-on-surface-variant); margin-top: 15px;">Al momento non ci sono concorsi aperti. La pagina verrà aggiornata tempestivamente.</p>
+            </div>
+        </main>
+    </div>
+
+    <div id="page-login" class="page-section">
+        <header class="hero-small" style="height: 35vh;">
+            <div class="hero-bg" style="background-image: url('https://i.imgur.com/gRzOXM3.png'); filter: blur(5px) brightness(0.2); opacity: 0.5;"></div>
+            <div class="hero-content">
+                <h1>AREA RISERVATA</h1>
+                <p>Portale di Accesso Dipendenti</p>
+            </div>
+        </header>
+
+        <main class="page-content overlap">
+             <div class="breadcrumb md-interactive">
+                <a onclick="showPage('page-home')">Home</a> 
+                <i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> 
+                <span>Login</span>
+            </div>
+            
+            <div class="login-formal-container">
+                <div class="login-card-formal">
+                    <img src="https://i.imgur.com/SUM8B5x.png" alt="Logo PDS" class="login-logo-formal">
+                    <h2>Accedi al tuo Account</h2>
+                    <p>Inserisci le tue credenziali dipartimentali certificate</p>
+
+                    <form onsubmit="event.preventDefault(); alert('Tentativo di login in corso...');">
+                        <div class="md-input-group">
+                            <label class="md-input-label">Matricola o Email Ufficiale</label>
+                            <input type="text" class="md-input" placeholder="es. rossi.m@poliziadistato.iprp" required>
+                        </div>
+                        
+                        <div class="md-input-group">
+                            <label class="md-input-label">Password Certificate</label>
+                            <input type="password" class="md-input" placeholder="••••••••" required>
+                        </div>
+
+                        <div class="login-options-formal">
+                            <label>
+                                <input type="checkbox" style="accent-color: var(--md-sys-color-primary);"> Ricordami
+                            </label>
+                            <a href="#">Recupera credenziali</a>
+                        </div>
+
+                        <button type="submit" class="md-btn-submit-formal md-interactive">
+                            Procedi <i class="fas fa-sign-in-alt"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
-
-        </div>
-    </section>
+        </main>
+    </div>
 
     <footer>
         <p>Sito Ufficiale della Polizia di Stato - Server IPRP | Solo a scopo Roleplay.</p>
-        <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.6;">Creato da Ryze - IPRP X</p>
+        <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.6;">Material 3 Version - Creato da Ryze - IPRP X</p>
     </footer>
 
+    <script>
+        // Gestione Navigazione Dinamica
+        function showPage(pageId) {
+            // Nascondi tutte le pagine
+            document.querySelectorAll('.page-section').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            
+            // Mostra la pagina target
+            const targetPage = document.getElementById(pageId);
+            if(targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            // Rimuovi classe active da tutti i link
+            document.querySelectorAll('.nav-link').forEach(function(el) {
+                el.classList.remove('active');
+            });
+
+            // Aggiungi classe active al link cliccato
+            const activeLinks = document.querySelectorAll(`.nav-link[data-target="${pageId}"]`);
+            activeLinks.forEach(link => link.classList.add('active'));
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Script Effetto Material Ripple
+        function createRipple(event) {
+            const button = event.currentTarget;
+            
+            const circle = document.createElement("span");
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
+
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+            circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+            circle.classList.add("ripple");
+
+            const ripple = button.getElementsByClassName("ripple")[0];
+            if (ripple) {
+                ripple.remove();
+            }
+
+            button.appendChild(circle);
+        }
+
+        const interactives = document.querySelectorAll('.md-interactive');
+        for (const interactive of interactives) {
+            interactive.addEventListener("mousedown", createRipple);
+        }
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
